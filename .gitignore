@@ -31,5 +31,6 @@
 # Debug files
 *.dSYM/
 
-bin/*
-obj/*
+*/bin/*
+*/obj/*
+.vs/*
