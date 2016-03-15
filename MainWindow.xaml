@@ -1,5 +1,0 @@
-﻿<NavigationWindow x:Class="Events.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="447" Width="525" Source="Home.xaml">
-</NavigationWindow>
