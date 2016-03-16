@@ -12,26 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using EventsApp.ViewModel;
 
 namespace EventsApp.View
 {
     /// <summary>
-    /// Interaction logic for Home.xaml
+    /// Interaction logic for ViewVideo.xaml
     /// </summary>
-    public partial class Home : Page
+    public partial class ViewVideo : Page
     {
-        public Home()
+        public ViewVideo()
         {
             InitializeComponent();
-            InitData();
-        }
-
-        private void InitData()
-        {
-            BaseViewModel hvm = this.DataContext as BaseViewModel;
-            if (hvm != null)
-                hvm._page = this;
         }
     }
 }

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Controls;
+using EventsApp.View;
 
 namespace EventsApp.ViewModel
 {
@@ -31,6 +33,7 @@ namespace EventsApp.ViewModel
     {
         private ListObject _list;
         private int _selectionId = 0;
+        public Page _page;
 
         public int Selection
         {
@@ -57,7 +60,7 @@ namespace EventsApp.ViewModel
         {
             get
             {
-                if (_list._descriptionList.Count < _selectionId || _list._descriptionList[_selectionId] == null)
+                if (_list._descriptionList.Count >= _selectionId || _list._descriptionList[_selectionId] == null)
                     return "No description available";
                 else return _list._descriptionList[_selectionId];
             }
@@ -73,7 +76,11 @@ namespace EventsApp.ViewModel
 
         private void NavigateToNews()
         {
-
+            if (_page != null)
+            {
+                ViewVideo viewVideo = new ViewVideo();
+                _page.NavigationService.Navigate(viewVideo);
+            }
         }
     }
 }
