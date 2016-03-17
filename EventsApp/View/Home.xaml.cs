@@ -31,7 +31,10 @@ namespace EventsApp.View
         {
             BaseViewModel hvm = this.DataContext as BaseViewModel;
             if (hvm != null)
+            {
                 hvm._page = this;
+                Converter.Convert("http://s.ch9.ms", "Events/Build/2015/RSS", hvm);
+            }
         }
     }
 }

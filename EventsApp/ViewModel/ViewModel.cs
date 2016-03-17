@@ -9,16 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Controls;
 using EventsApp.View;
+using System.ServiceModel.Syndication;
 
 namespace EventsApp.ViewModel
 {
-    public class ListObject
-    {
-        public ObservableCollection<string> _descriptionList = new ObservableCollection<string>();
-        public ObservableCollection<string> _linkList = new ObservableCollection<string>();
-        public ObservableCollection<string> _newsList = new ObservableCollection<string>();
-    }
-
     public class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,7 +25,7 @@ namespace EventsApp.ViewModel
 
     public class BaseViewModel : ObservableObject
     {
-        private ListObject _list;
+        private SyndicationFeed _feed = null;
         private int _selectionId = 0;
         public Page _page;
 
@@ -44,15 +38,19 @@ namespace EventsApp.ViewModel
             set
             {
                 _selectionId = value;
-                OnPropertyChangeEvent("Selection");
+                OnPropertyChangeEvent("GetDescription");
             }
         }
 
-        public IEnumerable<string> GetNewsList
+        public SyndicationFeed GetFeed
         {
             get
             {
-                return _list._newsList;
+                return _feed;
+            }
+            set
+            {
+                _feed = value;
             }
         }
 
@@ -60,9 +58,24 @@ namespace EventsApp.ViewModel
         {
             get
             {
-                if (_list._descriptionList.Count >= _selectionId || _list._descriptionList[_selectionId] == null)
+                if (_feed.Items.Count() >= _selectionId || _feed.Items.ElementAt(_selectionId) == null)
                     return "No description available";
-                else return _list._descriptionList[_selectionId];
+                else return _feed.Items.ElementAt(_selectionId).Title.Text;
+            }
+        }
+
+
+        public IEnumerable<string> GetTitlesList
+        {
+            get
+            {
+                ObservableCollection<string> titlesList = new ObservableCollection<string>();
+                foreach (var item in _feed.Items)
+                {
+                    titlesList.Add(item.Title.Text);
+                }
+
+                return titlesList;
             }
         }
 
