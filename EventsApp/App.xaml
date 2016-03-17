@@ -20,14 +20,11 @@
             <Setter Property="Grid.Row" Value="1" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Margin" Value="10,0,0,0" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="Text" Value="TextBlock" />
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Height" Value="68" />
             <Setter Property="Width" Value="280" />
             <Setter Property="Grid.Column" Value="6" />
             <Setter Property="FontFamily" Value="Verdana" />
-            <Setter Property="Text" Value="No description available" />
         </Style>
         <Style x:Key="viewVideoButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Grid.Column" Value="0" />
