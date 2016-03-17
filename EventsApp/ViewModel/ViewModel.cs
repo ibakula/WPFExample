@@ -58,7 +58,7 @@ namespace EventsApp.ViewModel
         {
             get
             {
-                if (_feed.Items.Count() >= _selectionId || _feed.Items.ElementAt(_selectionId) == null)
+                if (_feed == null || _feed.Items.Count() >= _selectionId || _feed.Items.ElementAt(_selectionId) == null)
                     return "No description available";
                 else return _feed.Items.ElementAt(_selectionId).Title.Text;
             }
@@ -70,9 +70,12 @@ namespace EventsApp.ViewModel
             get
             {
                 ObservableCollection<string> titlesList = new ObservableCollection<string>();
-                foreach (var item in _feed.Items)
+                if (_feed != null)
                 {
-                    titlesList.Add(item.Title.Text);
+                    foreach (var item in _feed.Items)
+                    {
+                        titlesList.Add(item.Title.Text);
+                    }
                 }
 
                 return titlesList;
