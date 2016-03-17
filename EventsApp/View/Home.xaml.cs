@@ -29,7 +29,7 @@ namespace EventsApp.View
 
         private void InitData()
         {
-            BaseViewModel hvm = this.DataContext as BaseViewModel;
+            BaseViewModel hvm = DataContext as BaseViewModel;
             if (hvm != null)
             {
                 hvm._page = this;

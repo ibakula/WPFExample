@@ -16,20 +16,22 @@ namespace EventsApp.View
     {
         static public void Convert(string hostUrl, string suffixUrl, BaseViewModel bvm) // https://channel9.msdn.com/Events/Build/2015/RSS / https://s.ch9.ms/Events/Build/2015/RSS
         {
-            byte[] data;
+            string xmlData = String.Empty;
             using (WebClient client = new WebClient())
             {
                 client.BaseAddress = hostUrl;
-                data = client.DownloadData(suffixUrl);
+                byte[] data = client.DownloadData(suffixUrl);
+                xmlData = Encoding.ASCII.GetString(data);
             }
-            using (BinaryWriter bw = new BinaryWriter(File.Create("rss.xml"), Encoding.ASCII))
+            using (StreamWriter sw = new StreamWriter(File.Open("rss.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)))
             {
-                bw.Write(data);
-                using (XmlReader xr = XmlReader.Create(bw.BaseStream))
-                {
-                    SyndicationFeed syn = SyndicationFeed.Load(xr);
-                    bvm.GetFeed = syn;
-                }
+                sw.Write(xmlData);
+            }
+            using (XmlReader xr = XmlReader.Create("rss.xml"))
+            {
+                xr.Read();
+                SyndicationFeed syn = SyndicationFeed.Load(xr);
+                bvm.GetFeed = syn;
             }
         }
     }

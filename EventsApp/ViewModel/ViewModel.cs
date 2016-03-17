@@ -26,19 +26,16 @@ namespace EventsApp.ViewModel
     public class BaseViewModel : ObservableObject
     {
         private SyndicationFeed _feed = null;
+        public Page _page = null;
         private int _selectionId = 0;
-        public Page _page;
 
-        public int Selection
+        public string GetDescription
         {
             get
             {
-                return _selectionId;
-            }
-            set
-            {
-                _selectionId = value;
-                OnPropertyChangeEvent("GetDescription");
+                if (_feed == null || !SelectionIsValid())
+                    return "No description available";
+                else return _feed.Items.ElementAt(_selectionId).Summary.Text;
             }
         }
 
@@ -51,19 +48,10 @@ namespace EventsApp.ViewModel
             set
             {
                 _feed = value;
+                OnPropertyChangeEvent("GetTitlesList");
+                OnPropertyChangeEvent("GetDescription");
             }
         }
-
-        public string GetDescription
-        {
-            get
-            {
-                if (_feed == null || _feed.Items.Count() >= _selectionId || _feed.Items.ElementAt(_selectionId) == null)
-                    return "No description available";
-                else return _feed.Items.ElementAt(_selectionId).Title.Text;
-            }
-        }
-
 
         public IEnumerable<string> GetTitlesList
         {
@@ -82,6 +70,19 @@ namespace EventsApp.ViewModel
             }
         }
 
+        public int Selection
+        {
+            get
+            {
+                return _selectionId;
+            }
+            set
+            {
+                _selectionId = value;
+                OnPropertyChangeEvent("GetDescription");
+            }
+        }
+
         public ICommand ShowNews
         {
             get
@@ -92,11 +93,16 @@ namespace EventsApp.ViewModel
 
         private void NavigateToNews()
         {
-            if (_page != null)
+            if (_page != null && SelectionIsValid())
             {
                 ViewVideo viewVideo = new ViewVideo();
                 _page.NavigationService.Navigate(viewVideo);
             }
+        }
+
+        private bool SelectionIsValid()
+        {
+            return (_feed.Items.Count() < _selectionId || _feed.Items.ElementAt(_selectionId) != null);
         }
     }
 }

@@ -7,9 +7,5 @@
         xmlns:ViewModel="clr-namespace:EventsApp.ViewModel"
         xmlns:Model="clr-namespace:EventsApp.Model"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" ResizeMode="NoResize" Source="Home">
-
-    <NavigationWindow.DataContext>
-        <ViewModel:BaseViewModel />
-    </NavigationWindow.DataContext>
+        Title="MainWindow" Height="370" Width="320" ResizeMode="CanResize" Source="Home.xaml">
 </NavigationWindow>

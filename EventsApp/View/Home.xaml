@@ -4,9 +4,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EventsApp.View"
+      xmlns:ViewModel="clr-namespace:EventsApp.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="Home">
+
+    <Page.DataContext>
+        <ViewModel:BaseViewModel />
+    </Page.DataContext>
 
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
         <Grid.ColumnDefinitions>
@@ -17,7 +22,7 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        <ListBox Name="newsListBox" ItemsSource="{Binding GetTitlesList}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
+        <ListBox Name="newsListBox" ItemsSource="{Binding GetTitlesList, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
         <TextBlock Text="{Binding GetDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource descriptionTextStyle}" />
         <Button Command="{Binding ShowNews}" Style="{StaticResource viewVideoButtonStyle}" />
     </Grid>

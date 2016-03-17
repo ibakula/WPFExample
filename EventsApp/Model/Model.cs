@@ -11,18 +11,18 @@ namespace EventsApp.Model
     {
         private Action _action;
 
-        #pragma warning disable 67
+#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
-        #pragma warning restore 67
-
-        public DelegateCommand(Action action)
-        {
-            _action = action;
-        }
+#pragma warning restore 67
 
         public bool CanExecute(object parameter)
         {
             return true;
+        }
+
+        public DelegateCommand(Action action)
+        {
+            _action = action;
         }
 
         public void Execute(object parameter)
