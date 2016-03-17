@@ -17,7 +17,7 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        <ListBox Name="newsListBox" ItemsSource="{Binding GetNewsList}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
+        <ListBox Name="newsListBox" ItemsSource="{Binding GetTitlesList}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
         <TextBlock Text="{Binding GetDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource descriptionTextStyle}" />
         <Button Command="{Binding ShowNews}" Style="{StaticResource viewVideoButtonStyle}" />
     </Grid>
