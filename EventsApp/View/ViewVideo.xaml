@@ -4,9 +4,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EventsApp.View"
+      xmlns:ViewModel="clr-namespace:EventsApp.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="ViewVideo">
+
+    <Page.DataContext>
+        <ViewModel:VideoViewModel />
+    </Page.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,8 +22,8 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        <MediaElement x:Name="videoElement" Style="{StaticResource videoMediaElementStyle}"/>
-        <TextBlock x:Name="textBlock" Style="{StaticResource videoDescriptionTextStyle}"/>
-        <Button x:Name="button" Style="{StaticResource videoButtonActionStyle}"/>
+        <MediaElement x:Name="videoElement" Style="{StaticResource videoMediaElementStyle}" />
+        <TextBlock x:Name="textBlock" Style="{StaticResource videoDescriptionTextStyle}" />
+        <Button x:Name="button" Style="{StaticResource videoButtonActionStyle}" />
     </Grid>
 </Page>

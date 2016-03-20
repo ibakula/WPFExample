@@ -27,7 +27,7 @@ namespace EventsApp.ViewModel
     {
         private SyndicationFeed _feed = null;
         public Page _page = null;
-        private int _selectionId = 0;
+        protected int _selectionId = 0;
 
         public string GetDescription
         {
@@ -70,6 +70,14 @@ namespace EventsApp.ViewModel
             }
         }
 
+        protected bool SelectionIsValid()
+        {
+            return (_feed.Items.Count() < _selectionId || _feed.Items.ElementAt(_selectionId) != null);
+        }
+    }
+
+    public class HomeViewModel : BaseViewModel
+    {
         public int Selection
         {
             get
@@ -99,10 +107,10 @@ namespace EventsApp.ViewModel
                 _page.NavigationService.Navigate(viewVideo);
             }
         }
+    }
 
-        private bool SelectionIsValid()
-        {
-            return (_feed.Items.Count() < _selectionId || _feed.Items.ElementAt(_selectionId) != null);
-        }
+    public class VideoViewModel : BaseViewModel
+    {
+
     }
 }

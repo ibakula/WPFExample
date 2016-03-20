@@ -23,6 +23,8 @@ namespace EventsApp.View
         public ViewVideo()
         {
             InitializeComponent();
+            this.InitData();
+            
         }
     }
 }

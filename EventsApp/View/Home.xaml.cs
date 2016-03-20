@@ -24,17 +24,8 @@ namespace EventsApp.View
         public Home()
         {
             InitializeComponent();
-            InitData();
-        }
-
-        private void InitData()
-        {
-            BaseViewModel hvm = DataContext as BaseViewModel;
-            if (hvm != null)
-            {
-                hvm._page = this;
-                Converter.Convert("http://s.ch9.ms", "Events/Build/2015/RSS", hvm);
-            }
+            this.InitData();
+            Converter.Convert("http://s.ch9.ms", "Events/Build/2015/RSS", (DataContext as BaseViewModel));
         }
     }
 }

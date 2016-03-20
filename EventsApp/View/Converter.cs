@@ -14,8 +14,18 @@ namespace EventsApp.View
 {
     class Converter
     {
+        /*
+            ToDo: Add Action in args so we could get the 
+            last element outcome 
+            for each page and rather 
+            use XML Serialization, as in 
+            more convenient and extensible?
+        */
         static public void Convert(string hostUrl, string suffixUrl, BaseViewModel bvm) // https://channel9.msdn.com/Events/Build/2015/RSS / https://s.ch9.ms/Events/Build/2015/RSS
         {
+            if (bvm == null)
+                return;
+
             byte[] data = null;
             using (WebClient client = new WebClient())
             {

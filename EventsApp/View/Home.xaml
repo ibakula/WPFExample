@@ -10,7 +10,7 @@
       Title="Home">
 
     <Page.DataContext>
-        <ViewModel:BaseViewModel />
+        <ViewModel:HomeViewModel />
     </Page.DataContext>
 
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
