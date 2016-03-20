@@ -9,7 +9,6 @@ using EventsApp.ViewModel;
 using System.ServiceModel.Syndication;
 using System.IO;
 using System.Xml;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace EventsApp.View
 {

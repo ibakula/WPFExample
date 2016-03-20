@@ -25,6 +25,7 @@
             <Setter Property="Width" Value="280" />
             <Setter Property="Grid.Column" Value="6" />
             <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style x:Key="viewVideoButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Grid.Column" Value="0" />
@@ -36,6 +37,24 @@
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="25" />
             <Setter Property="Content" Value="View" />
+        </Style>
+        <!-- Video view style -->
+        <Style x:Key="videoMediaElementStyle" TargetType="{x:Type MediaElement}">
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Grid.Row" Value="0" />
+        </Style>
+        <Style x:Key="videoDescriptionTextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="videoButtonActionStyle" TargetType="{x:Type Button}">
+            <Setter Property="Grid.Row" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Content" Value="Play" />
+            <Setter Property="Width" Value="75" />
+            <Setter Property="Height" Value="22" />
         </Style>
     </Application.Resources>
 </Application>
