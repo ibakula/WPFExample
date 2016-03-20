@@ -25,7 +25,7 @@ namespace EventsApp.ViewModel
 
     public class BaseViewModel : ObservableObject
     {
-        private SyndicationFeed _feed = null;
+        protected SyndicationFeed _feed = null;
         public Page _page = null;
         protected int _selectionId = 0;
 
@@ -111,6 +111,5 @@ namespace EventsApp.ViewModel
 
     public class VideoViewModel : BaseViewModel
     {
-
     }
 }
