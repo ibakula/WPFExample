@@ -59,12 +59,8 @@ namespace EventsApp.ViewModel
             {
                 ObservableCollection<string> titlesList = new ObservableCollection<string>();
                 if (_feed != null)
-                {
                     foreach (var item in _feed.Items)
-                    {
                         titlesList.Add(item.Title.Text);
-                    }
-                }
 
                 return titlesList;
             }

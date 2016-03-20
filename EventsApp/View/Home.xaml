@@ -13,14 +13,14 @@
         <ViewModel:HomeViewModel />
     </Page.DataContext>
 
-    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="185"/>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.7*" />
+            <RowDefinition Height="0.3*" />
         </Grid.RowDefinitions>
         <ListBox ItemsSource="{Binding GetTitlesList, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
         <TextBlock Text="{Binding GetDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource descriptionTextStyle}" />

@@ -23,7 +23,7 @@
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <MediaElement x:Name="videoElement" Style="{StaticResource videoMediaElementStyle}" />
-        <TextBlock x:Name="textBlock" Style="{StaticResource videoDescriptionTextStyle}" />
+        <TextBlock x:Name="textBlock" Text="{Binding GetDescription}" Style="{StaticResource videoDescriptionTextStyle}" />
         <Button x:Name="button" Style="{StaticResource videoButtonActionStyle}" />
     </Grid>
 </Page>
