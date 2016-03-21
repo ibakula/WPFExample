@@ -8,50 +8,35 @@ using System.Xml.Serialization;
 using EventsApp.ViewModel;
 using System.ServiceModel.Syndication;
 using System.IO;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace EventsApp.View
 {
     class Converter
     {
-        /*
-            ToDo: Add Action in args so we could get the 
-            last element outcome 
-            for each page and rather 
-            use XML Serialization, as in 
-            more convenient and extensible?
-        */
         static public void Convert(string hostUrl, string suffixUrl, BaseViewModel bvm) // https://channel9.msdn.com/Events/Build/2015/RSS / https://s.ch9.ms/Events/Build/2015/RSS
         {
             if (bvm == null)
                 return;
 
             byte[] data = null;
-            using (WebClient client = new WebClient())
+            EventsFeed feed = new EventsFeed();
+            XDocument xD = XDocument.Load(hostUrl + "/" + suffixUrl);
+            XNamespace[] nS = { "http://www.itunes.com/dtds/podcast-1.0.dtd", "http://purl.org/dc/elements/1.1/", "http://search.yahoo.com/mrss/" }; // itunes, dc, media  
+            foreach (var item in xD.Descendants("item"))
             {
-                client.BaseAddress = hostUrl;
-                try
+                FeedItem feedItem = new FeedItem();
+                feedItem.title = item.Element("title").Value;
+                feedItem.summary = item.Element(nS[0] + "summary").Value;
+                feedItem.comments = item.Element("comments").Value;
+                feedItem.creator = item.Element(nS[1] + "creator").Value;
+                feedItem.pubDate = item.Element("pubDate").Value;
+                foreach (var category in item.Elements("category"))
+                    feedItem.category.Add(category.Value);
+                foreach (var thumbnail in item.Elements(nS[2] + "thumbnail"))
                 {
-                    data = client.DownloadData(suffixUrl);
-                }
-#pragma warning disable 168
-                catch (Exception e) // Exception could occur if document unreachable.
-                {
-                    // ToDo: Handle
-                }
-#pragma warning restore 168
-            }
-            if (data == null) // Failed to get?
-                return;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                ms.Write(data, 0, data.Length);
-                ms.Position = 0;
-                using (XmlReader xr = XmlReader.Create(ms))
-                {
-                    xr.Read();
-                    SyndicationFeed syn = SyndicationFeed.Load(xr);
-                    bvm.GetFeed = syn;
+                    Thumbnail thumbnail = new Thumbnail();
+                    feedItem.thumbnail.Add()
                 }
             }
         }

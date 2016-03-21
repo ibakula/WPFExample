@@ -13,6 +13,45 @@ using System.ServiceModel.Syndication;
 
 namespace EventsApp.ViewModel
 {
+    public class Content
+    {
+        public string url;
+        public string duration;
+        public string fileSize;
+        public string type;
+        public string medium;
+    }
+
+    public class Group
+    {
+        public List<Content> content = new List<Content>();
+    }
+
+    public class Thumbnail
+    {
+        public string url;
+        public string height;
+        public string width;
+    }
+
+    public class FeedItem
+    {
+        public string title;
+        public string comments;
+        public string link;
+        public string summary;
+        public string pubDate;
+        public string creator;
+        public List<string> category = new List<string>();
+        public List<Thumbnail> thumbnail = new List<Thumbnail>();
+        public List<Group> group = new List<Group>();
+    }
+
+    public class EventsFeed
+    {
+        public List<FeedItem> Items = new List<FeedItem>();
+    }
+
     public class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
