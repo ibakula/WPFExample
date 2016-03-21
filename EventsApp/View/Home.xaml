@@ -22,7 +22,32 @@
             <RowDefinition Height="0.7*" />
             <RowDefinition Height="0.3*" />
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding GetTitlesList, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding Selection, Mode=TwoWay}" Style="{StaticResource videosListStyle}" />
+
+        <ListBox ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}"
+                 SelectedIndex="{Binding Selection, Mode=TwoWay}"
+                 Style="{StaticResource videosListStyle}">
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,8,4,12"
+                          Background="SaddleBrown">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="{Binding Title}"
+                                   FontSize="24"
+                                   />
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding Description}"
+                                   />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+
         <TextBlock Text="{Binding GetDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource descriptionTextStyle}" />
         <Button Command="{Binding ShowNews}" Style="{StaticResource viewVideoButtonStyle}" />
     </Grid>

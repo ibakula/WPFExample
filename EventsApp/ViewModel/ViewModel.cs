@@ -48,10 +48,16 @@ namespace EventsApp.ViewModel
             set
             {
                 _feed = value;
-                OnPropertyChangeEvent("GetTitlesList");
+                OnPropertyChangeEvent(nameof(GetTitlesList));
                 OnPropertyChangeEvent("GetDescription");
+
+                Items.Clear();
+                foreach (var item in _feed.Items)
+                    Items.Add(new ItemViewModel(item));
             }
         }
+
+        public ObservableCollection<ItemViewModel> Items { get; } = new ObservableCollection<ItemViewModel>();
 
         public IEnumerable<string> GetTitlesList
         {
