@@ -1,4 +1,4 @@
-﻿using System.ServiceModel.Syndication;
+﻿using EventsApp.Model;
 
 namespace EventsApp.ViewModel
 {
@@ -6,17 +6,23 @@ namespace EventsApp.ViewModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string ThumbnailUrl { get; set; }
-        public string VideoUrl { get; set; }
+        public string Author { get; set; }
+        public string publishDate { get; set; }
+        public thumbnail[] Thumbnail { get; set; }
+        public groupContent[] Video { get; set; }
 
         public ItemViewModel()
         {
         }
 
-        public ItemViewModel(SyndicationItem item)
+        public ItemViewModel(rssChannelItem item)
         {
-            Title = item.Title.Text;
-            Description = item.Summary.Text;
+            Title = item.title;
+            Description = item.summary;
+            Thumbnail = item.thumbnail;
+            Video = item.group;
+            Author = item.creator;
+            publishDate = item.pubDate;
         }
     }
 }

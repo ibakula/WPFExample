@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EventsApp.ViewModel;
 
 namespace EventsApp.View
 {
@@ -24,7 +25,13 @@ namespace EventsApp.View
         {
             InitializeComponent();
             this.InitData();
-            
+        }
+
+        public ViewVideo(ItemViewModel ivm) : this()
+        {
+            VideoViewModel vvm = DataContext as VideoViewModel;
+            vvm.ItemView = ivm;
+            button.IsEnabled = true;
         }
     }
 }

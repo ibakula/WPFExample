@@ -9,30 +9,30 @@ using EventsApp.ViewModel;
 using System.ServiceModel.Syndication;
 using System.IO;
 using System.Xml;
+using EventsApp.Model;
 
 namespace EventsApp.View
 {
     class Converter
     {
-        /*
-            ToDo: Add Action in args so we could get the 
-            last element outcome 
-            for each page and rather 
-            use XML Serialization, as in 
-            more convenient and extensible?
-        */
-        static public void Convert(string hostUrl, string suffixUrl, BaseViewModel bvm) // https://channel9.msdn.com/Events/Build/2015/RSS / https://s.ch9.ms/Events/Build/2015/RSS
+        static public void ConvertXmlToObject(string url, BaseViewModel bvm) // https://channel9.msdn.com/Events/Build/2015/RSS / https://s.ch9.ms/Events/Build/2015/RSS
         {
             if (bvm == null)
                 return;
-
-            byte[] data = null;
+            
             using (WebClient client = new WebClient())
             {
-                client.BaseAddress = hostUrl;
                 try
                 {
-                    data = client.DownloadData(suffixUrl);
+                    var xml = client.DownloadData(url);
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(rss));
+                    using (var stream = new MemoryStream())
+                    {
+                        stream.Write(xml, 0, xml.Length);
+                        stream.Position = 0;
+                        rss feed = (rss)xmlSerializer.Deserialize(stream);
+                        bvm.Feed = feed;
+                    }
                 }
 #pragma warning disable 168
                 catch (Exception e) // Exception could occur if document unreachable.
@@ -40,19 +40,6 @@ namespace EventsApp.View
                     // ToDo: Handle
                 }
 #pragma warning restore 168
-            }
-            if (data == null) // Failed to get?
-                return;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                ms.Write(data, 0, data.Length);
-                ms.Position = 0;
-                using (XmlReader xr = XmlReader.Create(ms))
-                {
-                    xr.Read();
-                    SyndicationFeed syn = SyndicationFeed.Load(xr);
-                    bvm.GetFeed = syn;
-                }
             }
         }
     }
