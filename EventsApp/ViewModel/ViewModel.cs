@@ -16,7 +16,7 @@ namespace EventsApp.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChangeEvent(string name)
+        protected void RaisePropertyChangedEvent(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -58,10 +58,10 @@ namespace EventsApp.ViewModel
             set
             {
                 _selectionId = value;
-                OnPropertyChangeEvent(nameof(Description));
+                RaisePropertyChangedEvent(nameof(Description));
             }
         }
-
+        
         public string Description
         {
             get
@@ -99,9 +99,21 @@ namespace EventsApp.ViewModel
     public class VideoViewModel : BaseViewModel
     {
         private bool _playedPreviously = false;
-        private int _selectedUrlId = 0;
+        private int _selectedQualityIndex = 0;
         private ItemViewModel _ivm = null;
         private TimeSpan _videoPosition = TimeSpan.FromSeconds(0);
+        private List<string> _videoQuality = new List<string>();
+
+        public IEnumerable<string> AvailableQuality
+        {
+            get
+            {
+                if (_ivm == null)
+                    return new string[3] { "High", "Medium", "Low" };
+
+                return _videoQuality;
+            }
+        }
 
         public ItemViewModel ItemView
         {
@@ -112,7 +124,10 @@ namespace EventsApp.ViewModel
             set
             {
                 _ivm = value;
-                OnPropertyChangeEvent("Selection");
+                SetDefaultSelection();
+                RaisePropertyChangedEvent("Selection");
+                RaisePropertyChangedEvent("Description");
+                RaisePropertyChangedEvent("AvailableQuality");
             }
         }
 
@@ -121,6 +136,16 @@ namespace EventsApp.ViewModel
             get
             {
                 return new DelegateCommand(DoAction);
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                if (_ivm == null)
+                    return "No description available.";
+                else return _ivm.Description + "\n\nPublished on: " + _ivm.publishDate + "\nCreators: " + _ivm.Author;
             }
         }
 
@@ -134,18 +159,41 @@ namespace EventsApp.ViewModel
                 if (!_playedPreviously)
                     return new Uri(_ivm.Thumbnail[0].url);
 
-                if (_ivm.Video.Count() < _selectedUrlId || _ivm.Video.ElementAt(_selectedUrlId).url == String.Empty)
+                if (_ivm.Video.Count() < _selectedQualityIndex || _ivm.Video.ElementAt(_selectedQualityIndex).url == String.Empty)
                     SetDefaultSelection();
 
-                return new Uri(_ivm.Video.ElementAt(_selectedUrlId).url);
+                return new Uri(_ivm.Video[_selectedQualityIndex].url);
+            }
+        }
+
+        public int SelectedQuality
+        {
+            get
+            {
+                return _selectedQualityIndex;
+            }
+            set
+            {
+                _selectedQualityIndex = value;
+                RaisePropertyChangedEvent("Selection");
             }
         }
 
         public void SetDefaultSelection()
         {
-            for (; _selectedUrlId < _ivm.Video.Length; ++_selectedUrlId)
-                if (_ivm.Video[_selectedUrlId].url.Contains("_high.mp4") || _ivm.Video[_selectedUrlId].url.Contains(".mp4"))
-                    break;
+            string[,] extension = new string[,] { { "_high.mp4", "High" }, { "_mid.mp4", "Medium" }, { ".mp4", "Low" } };
+
+            foreach (var video in _ivm.Video)
+                for (int i = 0; i < 2; ++i)
+                    if (video.url.Contains(extension[i, 0]))
+                    {
+                        if (i == 0 || i == 2)
+                            _selectedQualityIndex = i;
+
+                        _videoQuality.Add(extension[i, 1]);
+                        break;
+                    }
+
         }
 
         public void DoAction()
@@ -160,12 +208,9 @@ namespace EventsApp.ViewModel
             else
             {
                 if (!_playedPreviously)
-                {
-                    SetDefaultSelection();
                     _playedPreviously = true;
-                }
 
-                viewVideo.videoElement.Source = new Uri(_ivm.Video[_selectedUrlId].url);
+                viewVideo.videoElement.Source = new Uri(_ivm.Video[_selectedQualityIndex].url);
                 viewVideo.videoElement.Position = _videoPosition;
                 viewVideo.button.Content = "Pause";
             }

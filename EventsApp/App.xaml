@@ -11,7 +11,7 @@
         </Style>
         <Style x:Key="descriptionTextStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Grid.Row" Value="1" />
-            <Setter Property="Margin" Value="5,0,5,0" />
+            <Setter Property="Margin" Value="10,0,10,0" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style x:Key="viewVideoButtonStyle" TargetType="{x:Type Button}">
@@ -19,7 +19,7 @@
             <Setter Property="Grid.Row" Value="2" />
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Bottom" />
-            <Setter Property="Margin" Value="0,0,15,10" />
+            <Setter Property="Margin" Value="0,0,10,10" />
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="25" />
         </Style>

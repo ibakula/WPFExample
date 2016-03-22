@@ -50,6 +50,9 @@
 
         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
                    Style="{StaticResource descriptionTextStyle}" />
-        <Button Command="{Binding News}" Style="{StaticResource viewVideoButtonStyle}" />
+        
+        <Button Command="{Binding News}" 
+                Style="{StaticResource viewVideoButtonStyle}" />
+        
     </Grid>
 </Page>

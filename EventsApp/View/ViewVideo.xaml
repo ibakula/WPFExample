@@ -17,14 +17,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        <MediaElement x:Name="videoElement" Source="{Binding Selection, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource videoMediaElementStyle}" />
-        <TextBlock x:Name="textBlock" Text="{Binding GetDescription}" Style="{StaticResource videoDescriptionTextStyle}" />
-        <Button x:Name="button" Command="{Binding ButtonAction}" IsEnabled="False" Style="{StaticResource videoButtonActionStyle}" />
-        <ComboBox ItemsSource="{Binding }" x:Name="comboBox" Style="{StaticResource videoComboBoxStyle}" />
+        
+        <MediaElement x:Name="videoElement" 
+                      Source="{Binding Selection, UpdateSourceTrigger=PropertyChanged}" 
+                      Style="{StaticResource videoMediaElementStyle}" />
+        
+        <TextBlock x:Name="textBlock" 
+                   Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                   Style="{StaticResource videoDescriptionTextStyle}" />
+        
+        <Button x:Name="button" Command="{Binding ButtonAction}" 
+                IsEnabled="False" 
+                Style="{StaticResource videoButtonActionStyle}" />
+        
+        <ComboBox ItemsSource="{Binding AvailableQuality, UpdateSourceTrigger=PropertyChanged}" 
+                  SelectedIndex="{Binding SelectedQuality, Mode=TwoWay}" 
+                  x:Name="comboBox" 
+                  Style="{StaticResource videoComboBoxStyle}" />
     </Grid>
 </Page>
