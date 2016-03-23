@@ -99,10 +99,11 @@ namespace EventsApp.ViewModel
     public class VideoViewModel : BaseViewModel
     {
         private bool _playedPreviously = false;
-        private int _selectedQualityIndex = 0;
         private ItemViewModel _ivm = null;
         private TimeSpan _videoPosition = TimeSpan.FromSeconds(0);
         private List<string> _videoQuality = new List<string>();
+        private List<int> _videoQualityUrlId = new List<int>();
+        private int _selectedQualityIndex =  0;
 
         public IEnumerable<string> AvailableQuality
         {
@@ -159,10 +160,10 @@ namespace EventsApp.ViewModel
                 if (!_playedPreviously)
                     return new Uri(_ivm.Thumbnail[0].url);
 
-                if (_ivm.Video.Count() < _selectedQualityIndex || _ivm.Video.ElementAt(_selectedQualityIndex).url == String.Empty)
+                if (_ivm.Video.Count() < _videoQualityUrlId[_selectedQualityIndex] || _ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url == String.Empty)
                     SetDefaultSelection();
 
-                return new Uri(_ivm.Video[_selectedQualityIndex].url);
+                return new Uri(_ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url);
             }
         }
 
@@ -183,17 +184,21 @@ namespace EventsApp.ViewModel
         {
             string[,] extension = new string[,] { { "_high.mp4", "High" }, { "_mid.mp4", "Medium" }, { ".mp4", "Low" } };
 
-            foreach (var video in _ivm.Video)
-                for (int i = 0; i < 2; ++i)
-                    if (video.url.Contains(extension[i, 0]))
+            for (int u = 0; u < _ivm.Video.Length; ++u)
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    if (_ivm.Video[u].url.Contains(extension[i, 0]))
                     {
-                        if (i == 0 || i == 2)
-                            _selectedQualityIndex = i;
+                        if (_videoQuality.Contains(extension[i, 1]))
+                            continue;
 
                         _videoQuality.Add(extension[i, 1]);
+                        _videoQualityUrlId.Add(u);
                         break;
                     }
-
+                }
+            }
         }
 
         public void DoAction()
@@ -210,7 +215,7 @@ namespace EventsApp.ViewModel
                 if (!_playedPreviously)
                     _playedPreviously = true;
 
-                viewVideo.videoElement.Source = new Uri(_ivm.Video[_selectedQualityIndex].url);
+                viewVideo.videoElement.Source = new Uri(_ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url);
                 viewVideo.videoElement.Position = _videoPosition;
                 viewVideo.button.Content = "Pause";
             }
