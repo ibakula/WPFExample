@@ -204,21 +204,10 @@ namespace EventsApp.ViewModel
         public void DoAction()
         {
             ViewVideo viewVideo = _page as ViewVideo;
-            if (viewVideo.button.Content.ToString() == "Pause")
-            {
-                _videoPosition = viewVideo.videoElement.Position;
-                viewVideo.videoElement.Source = new Uri(_ivm.Thumbnail[0].url);
-                viewVideo.button.Content = "Play";
-            }
-            else
-            {
-                if (!_playedPreviously)
-                    _playedPreviously = true;
-
-                viewVideo.videoElement.Source = new Uri(_ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url);
-                viewVideo.videoElement.Position = _videoPosition;
-                viewVideo.button.Content = "Pause";
-            }
+            _playedPreviously = (!_playedPreviously);
+            viewVideo.videoElement.Position = _videoPosition;
+            viewVideo.button.Content = (((string)viewVideo.button.Content)?.Contains("Pause") == true ? "Play" : "Pause");
+            RaisePropertyChangedEvent(nameof(Selection));
         }
     }
 }
