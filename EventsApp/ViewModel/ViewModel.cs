@@ -102,7 +102,7 @@ namespace EventsApp.ViewModel
         private ItemViewModel _ivm = null;
         private TimeSpan _videoPosition = TimeSpan.FromSeconds(0);
         private List<string> _videoQuality = new List<string>();
-        private List<int> _videoQualityUrlId = new List<int>();
+        private List<Uri> _videoQualityUrl = new List<Uri>();
         private int _selectedQualityIndex =  0;
 
         public IEnumerable<string> AvailableQuality
@@ -126,9 +126,9 @@ namespace EventsApp.ViewModel
             {
                 _ivm = value;
                 SetDefaultSelection();
-                RaisePropertyChangedEvent("Selection");
-                RaisePropertyChangedEvent("Description");
-                RaisePropertyChangedEvent("AvailableQuality");
+                RaisePropertyChangedEvent(nameof(Selection));
+                RaisePropertyChangedEvent(nameof(Description));
+                RaisePropertyChangedEvent(nameof(AvailableQuality));
             }
         }
 
@@ -158,12 +158,12 @@ namespace EventsApp.ViewModel
                     return null;
 
                 if (!_playedPreviously)
-                    return new Uri(_ivm.Thumbnail[0].url);
+                    return _videoQualityUrl[0];
 
-                if (_ivm.Video.Count() < _videoQualityUrlId[_selectedQualityIndex] || _ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url == String.Empty)
+                if (_videoQualityUrl.Count() < _selectedQualityIndex + 1 || _videoQualityUrl[_selectedQualityIndex+1] == null)
                     SetDefaultSelection();
 
-                return new Uri(_ivm.Video[_videoQualityUrlId[_selectedQualityIndex]].url);
+                return _videoQualityUrl[_selectedQualityIndex+1];
             }
         }
 
@@ -176,13 +176,17 @@ namespace EventsApp.ViewModel
             set
             {
                 _selectedQualityIndex = value;
-                RaisePropertyChangedEvent("Selection");
+                RaisePropertyChangedEvent(nameof(Selection));
             }
         }
 
         public void SetDefaultSelection()
         {
             string[,] extension = new string[,] { { "_high.mp4", "High" }, { "_mid.mp4", "Medium" }, { ".mp4", "Low" } };
+            _videoQuality.Clear();
+            _videoQualityUrl.Clear();
+            _selectedQualityIndex = 0;
+            _videoQualityUrl.Add(new Uri(_ivm.Thumbnail[0].url));
 
             for (int u = 0; u < _ivm.Video.Length; ++u)
             {
@@ -194,7 +198,7 @@ namespace EventsApp.ViewModel
                             continue;
 
                         _videoQuality.Add(extension[i, 1]);
-                        _videoQualityUrlId.Add(u);
+                        _videoQualityUrl.Add(new Uri(_ivm.Video[u].url));
                         break;
                     }
                 }
@@ -205,9 +209,12 @@ namespace EventsApp.ViewModel
         {
             ViewVideo viewVideo = _page as ViewVideo;
             _playedPreviously = (!_playedPreviously);
-            viewVideo.videoElement.Position = _videoPosition;
             viewVideo.button.Content = (((string)viewVideo.button.Content)?.Contains("Pause") == true ? "Play" : "Pause");
+            if (!_playedPreviously)
+                _videoPosition = viewVideo.videoElement.Position;
+
             RaisePropertyChangedEvent(nameof(Selection));
+            viewVideo.videoElement.Position = _videoPosition;
         }
     }
 }
