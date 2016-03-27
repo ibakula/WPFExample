@@ -25,7 +25,9 @@ namespace EventsApp.ViewModel
     public class BaseViewModel : ObservableObject
     {
         protected rss _feed = null;
-        public Page _page = null;
+        protected Page _page = null;
+
+        public virtual Page page { get { return _page; } set { _page = value; } }
 
         public rss Feed
         {
@@ -48,6 +50,8 @@ namespace EventsApp.ViewModel
     public class HomeViewModel : BaseViewModel
     {
         protected int _selectionId = 0;
+
+        public override Page page { get { return _page; } set { _page = value; RaisePropertyChangedEvent(nameof(Description)); } }
 
         public int Selection
         {
@@ -125,7 +129,7 @@ namespace EventsApp.ViewModel
             set
             {
                 _ivm = value;
-                SetDefaultSelection();
+                LoadSelections();
                 RaisePropertyChangedEvent(nameof(Selection));
                 RaisePropertyChangedEvent(nameof(Description));
                 RaisePropertyChangedEvent(nameof(AvailableQuality));
@@ -137,6 +141,14 @@ namespace EventsApp.ViewModel
             get
             {
                 return new DelegateCommand(DoAction);
+            }
+        }
+
+        public ICommand ButtonStop
+        {
+            get
+            {
+                return new DelegateCommand(StopVideo);
             }
         }
 
@@ -161,7 +173,7 @@ namespace EventsApp.ViewModel
                     return _videoQualityUrl[0];
 
                 if (_videoQualityUrl.Count() < _selectedQualityIndex + 1 || _videoQualityUrl[_selectedQualityIndex+1] == null)
-                    SetDefaultSelection();
+                    LoadSelections();
 
                 return _videoQualityUrl[_selectedQualityIndex+1];
             }
@@ -180,7 +192,7 @@ namespace EventsApp.ViewModel
             }
         }
 
-        public void SetDefaultSelection()
+        public void LoadSelections()
         {
             string[,] extension = new string[,] { { "_high.mp4", "High" }, { "_mid.mp4", "Medium" }, { ".mp4", "Low" } };
             _videoQuality.Clear();
@@ -208,13 +220,29 @@ namespace EventsApp.ViewModel
         public void DoAction()
         {
             ViewVideo viewVideo = _page as ViewVideo;
-            _playedPreviously = (!_playedPreviously);
-            viewVideo.button.Content = (((string)viewVideo.button.Content)?.Contains("Pause") == true ? "Play" : "Pause");
-            if (!_playedPreviously)
-                _videoPosition = viewVideo.videoElement.Position;
+            bool isPlaying = (viewVideo.actionButton.Content as string).Contains("Pause");
+            viewVideo.actionButton.Content = (isPlaying ? "Play" : "Pause");
 
-            RaisePropertyChangedEvent(nameof(Selection));
-            viewVideo.videoElement.Position = _videoPosition;
+            if (!isPlaying)
+                viewVideo.videoElement.Play();
+            else viewVideo.videoElement.Pause();
+
+            if (!viewVideo.stopButton.IsEnabled)
+                viewVideo.stopButton.IsEnabled = true;
+
+            if (!_playedPreviously)
+            {
+                _playedPreviously = true;
+                RaisePropertyChangedEvent(nameof(Selection));
+            }
+        }
+
+        public void StopVideo()
+        {
+            ViewVideo viewVideo = _page as ViewVideo;
+            viewVideo.videoElement.Stop();
+            viewVideo.actionButton.Content = "Play";
+            viewVideo.stopButton.IsEnabled = false;
         }
     }
 }

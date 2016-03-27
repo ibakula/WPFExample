@@ -15,7 +15,7 @@ namespace EventsApp.View
             BaseViewModel bvm = page.DataContext as BaseViewModel;
             if (bvm != null)
             {
-                bvm._page = page;
+                bvm.page = page;
                 _action?.Invoke();
             }
         }

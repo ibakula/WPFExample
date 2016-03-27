@@ -31,7 +31,7 @@ namespace EventsApp.View
         {
             VideoViewModel vvm = DataContext as VideoViewModel;
             vvm.ItemView = ivm;
-            button.IsEnabled = true;
+            actionButton.IsEnabled = true;
         }
     }
 }

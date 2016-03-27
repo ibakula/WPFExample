@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:EventsApp.View"
       xmlns:ViewModel="clr-namespace:EventsApp.ViewModel"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="450" d:DesignWidth="450"
       Title="ViewVideo">
 
     <Page.DataContext>
@@ -17,28 +17,52 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        
+
         <MediaElement x:Name="videoElement" 
                       Source="{Binding Selection, UpdateSourceTrigger=PropertyChanged}" 
-                      Style="{StaticResource videoMediaElementStyle}" />
-        
+                      Style="{StaticResource videoMediaElementStyle}"
+                      UnloadedBehavior="Manual" 
+                      LoadedBehavior="Manual" />
+
         <TextBlock x:Name="textBlock" 
                    Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
                    Style="{StaticResource videoDescriptionTextStyle}" />
-        
-        <Button x:Name="button" Command="{Binding ButtonAction}" 
-                IsEnabled="False" 
-                Style="{StaticResource videoButtonActionStyle}" />
-        
-        <ComboBox ItemsSource="{Binding AvailableQuality, UpdateSourceTrigger=PropertyChanged}" 
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5,5,0,0" HorizontalAlignment="Center">
+            <TextBlock VerticalAlignment="Bottom" 
+                       Height="22" 
+                       Margin="0,10,10,10" RenderTransformOrigin="0.487,1.85">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-1.137"/>
+                        <TranslateTransform X="0.538" Y="0.005"/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>Quality:</TextBlock>
+
+            <ComboBox ItemsSource="{Binding AvailableQuality, UpdateSourceTrigger=PropertyChanged}" 
                   SelectedIndex="{Binding SelectedQuality, Mode=TwoWay}" 
                   x:Name="comboBox" 
-                  Style="{StaticResource videoComboBoxStyle}" />
+                  Style="{StaticResource videoComboBoxStyle}" Margin="10" />
+
+            <Button x:Name="stopButton" 
+                    Command="{Binding ButtonStop}"
+                    Style="{StaticResource videoStopButtonStyle}" 
+                    Margin="10"
+                    IsEnabled="False"/>
+
+            <Button x:Name="actionButton" 
+                    Command="{Binding ButtonAction}"
+                    Style="{StaticResource videoActionButtonStyle}" 
+                    Margin="10"
+                    IsEnabled="False"/>
+        </StackPanel>
     </Grid>
 </Page>
