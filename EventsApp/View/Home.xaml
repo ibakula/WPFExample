@@ -13,46 +13,27 @@
         <ViewModel:HomeViewModel />
     </Page.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="0.7*" />
-            <RowDefinition Height="0.3*" />
-        </Grid.RowDefinitions>
+    <ListBox ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}"
+             SelectedIndex="{Binding Selection, Mode=TwoWay}"
+             Style="{StaticResource videosListStyle}"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+             MouseDoubleClick="ListBox_MouseDoubleClick">
 
-        <ListBox ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}"
-                 SelectedIndex="{Binding Selection, Mode=TwoWay}"
-                 Style="{StaticResource videosListStyle}">
-            
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="4,8,4,12"
-                          Background="SaddleBrown">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        
-                        <TextBlock Text="{Binding Title}"
-                                   FontSize="24"
-                                   />
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding Description}"
-                                   />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            
-        </ListBox>
-
-        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
-                   Style="{StaticResource descriptionTextStyle}" />
-        
-        <Button Command="{Binding News}" 
-                Style="{StaticResource viewVideoButtonStyle}" />
-        
-    </Grid>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Border BorderBrush="Black" BorderThickness="1" CornerRadius="2" Margin="1">
+                    <Image Source="{Binding Thumb}"
+                       Stretch="Uniform" 
+                       Width="178" 
+                       Height="100" 
+                       />
+                </Border>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+    </ListBox>
 </Page>

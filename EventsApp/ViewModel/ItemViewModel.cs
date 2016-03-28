@@ -1,4 +1,5 @@
 ﻿using EventsApp.Model;
+using System;
 
 namespace EventsApp.ViewModel
 {
@@ -10,6 +11,7 @@ namespace EventsApp.ViewModel
         public string publishDate { get; set; }
         public thumbnail[] Thumbnail { get; set; }
         public groupContent[] Video { get; set; }
+        public Uri Thumb { get { return new Uri(Thumbnail[0].url); } }
 
         public ItemViewModel()
         {

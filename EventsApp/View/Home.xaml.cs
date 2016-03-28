@@ -26,5 +26,13 @@ namespace EventsApp.View
             InitializeComponent();
             this.InitData(() => Converter.ConvertXmlToObject("http://s.ch9.ms/Events/Build/2015/RSS", (DataContext as BaseViewModel)));
         }
+
+        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HomeViewModel hvm = DataContext as HomeViewModel;
+            ItemViewModel ivm = hvm?.Items.ElementAt(hvm.Selection);
+            ViewVideo viewVideo = new ViewVideo(ivm);
+            NavigationService.Navigate(viewVideo);
+        }
     }
 }

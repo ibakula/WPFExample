@@ -41,6 +41,8 @@ namespace EventsApp.ViewModel
                 Items.Clear();
                 foreach (var item in _feed.channel.item)
                     Items.Add(new ItemViewModel(item));
+
+                RaisePropertyChangedEvent(nameof(Items));
             }
         }
 
@@ -74,24 +76,6 @@ namespace EventsApp.ViewModel
                     return "No description available.";
                 else return Items.ElementAt(_selectionId).Description + "\n\nPublished on: " + Items.ElementAt(_selectionId).publishDate + "\nCreators: " + Items.ElementAt(_selectionId).Author;
             } 
-        }
-
-        public ICommand News
-        {
-            get
-            {
-                return new DelegateCommand(NavigateToNews);
-            }
-        }
-
-        private void NavigateToNews()
-        {
-            if (_page != null)
-            {
-                ItemViewModel ivm = Items.ElementAt(_selectionId);
-                ViewVideo viewVideo = new ViewVideo(ivm);
-                _page.NavigationService.Navigate(viewVideo);
-            }
         }
 
         protected bool SelectionIsValid()
