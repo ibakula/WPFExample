@@ -17,21 +17,21 @@ using EventsApp.ViewModel;
 namespace EventsApp.View
 {
     /// <summary>
-    /// Interaction logic for ViewVideo.xaml
+    /// Interaction logic for Video.xaml
     /// </summary>
-    public partial class ViewVideo : Page
+    public partial class Video : Page
     {
-        public ViewVideo()
+        public Video()
         {
             InitializeComponent();
             this.InitData();
         }
 
-        public ViewVideo(ItemViewModel ivm) : this()
+        public Video(Uri video):this()
         {
-            PreviewViewModel vvm = DataContext as PreviewViewModel;
-            vvm.ItemView = ivm;
-            startButton.IsEnabled = true;
+            VideoViewModel viewModel = DataContext as VideoViewModel;
+            viewModel.video = video;
+            actionButton.IsEnabled = true;
         }
     }
 }

@@ -59,6 +59,9 @@
     <Compile Include="Model\rss.cs" />
     <Compile Include="ViewModel\ItemViewModel.cs" />
     <Compile Include="View\PageExtension.cs" />
+    <Compile Include="View\Video.xaml.cs">
+      <DependentUpon>Video.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewVideo.xaml.cs">
       <DependentUpon>ViewVideo.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Video.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ViewVideo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -84,25 +84,13 @@ namespace EventsApp.ViewModel
         }
     }
 
-    public class VideoViewModel : BaseViewModel
+    public class PreviewViewModel : BaseViewModel
     {
-        private bool _playedPreviously = false;
         private ItemViewModel _ivm = null;
-        private TimeSpan _videoPosition = TimeSpan.FromSeconds(0);
-        private List<string> _videoQuality = new List<string>();
         private List<Uri> _videoQualityUrl = new List<Uri>();
         private int _selectedQualityIndex =  0;
 
-        public IEnumerable<string> AvailableQuality
-        {
-            get
-            {
-                if (_ivm == null)
-                    return new string[3] { "High", "Medium", "Low" };
-
-                return _videoQuality;
-            }
-        }
+        public List<string> VideoQuality { get; } = new List<string>();
 
         public ItemViewModel ItemView
         {
@@ -114,25 +102,17 @@ namespace EventsApp.ViewModel
             {
                 _ivm = value;
                 LoadSelections();
-                RaisePropertyChangedEvent(nameof(Selection));
+                RaisePropertyChangedEvent(nameof(SelectedQuality));
                 RaisePropertyChangedEvent(nameof(Description));
-                RaisePropertyChangedEvent(nameof(AvailableQuality));
+                RaisePropertyChangedEvent(nameof(VideoQuality));
             }
         }
 
-        public ICommand ButtonAction
+        public ICommand Play
         {
             get
             {
-                return new DelegateCommand(DoAction);
-            }
-        }
-
-        public ICommand ButtonStop
-        {
-            get
-            {
-                return new DelegateCommand(StopVideo);
+                return new DelegateCommand(NavigateToPlayPage);
             }
         }
 
@@ -146,20 +126,23 @@ namespace EventsApp.ViewModel
             }
         }
 
-        public Uri Selection
+        public void NavigateToPlayPage()
+        {
+            Video video = new Video(Selection);
+            _page.NavigationService.Navigate(video);
+        }
+
+        private Uri Selection
         {
             get
             {
                 if (_ivm == null)
                     return null;
 
-                if (!_playedPreviously)
-                    return _videoQualityUrl[0];
-
-                if (_videoQualityUrl.Count() < _selectedQualityIndex + 1 || _videoQualityUrl[_selectedQualityIndex+1] == null)
+                if (_selectedQualityIndex < 0 || _videoQualityUrl.Count() < _selectedQualityIndex || _videoQualityUrl[_selectedQualityIndex] == null)
                     LoadSelections();
 
-                return _videoQualityUrl[_selectedQualityIndex+1];
+                return _videoQualityUrl[_selectedQualityIndex];
             }
         }
 
@@ -179,10 +162,9 @@ namespace EventsApp.ViewModel
         public void LoadSelections()
         {
             string[,] extension = new string[,] { { "_high.mp4", "High" }, { "_mid.mp4", "Medium" }, { ".mp4", "Low" } };
-            _videoQuality.Clear();
+            VideoQuality.Clear();
             _videoQualityUrl.Clear();
             _selectedQualityIndex = 0;
-            _videoQualityUrl.Add(new Uri(_ivm.Thumbnail[0].url));
 
             for (int u = 0; u < _ivm.Video.Length; ++u)
             {
@@ -190,20 +172,42 @@ namespace EventsApp.ViewModel
                 {
                     if (_ivm.Video[u].url.Contains(extension[i, 0]))
                     {
-                        if (_videoQuality.Contains(extension[i, 1]))
+                        if (VideoQuality.Contains(extension[i, 1]))
                             continue;
 
-                        _videoQuality.Add(extension[i, 1]);
+                        VideoQuality.Add(extension[i, 1]);
                         _videoQualityUrl.Add(new Uri(_ivm.Video[u].url));
                         break;
                     }
                 }
             }
         }
+    }
+
+    public class VideoViewModel : BaseViewModel
+    {
+        private Uri _video = null;
+        public Uri video { get { return _video; } set { _video = value; RaisePropertyChangedEvent(nameof(video)); } }
+
+        public ICommand ButtonAction
+        {
+            get
+            {
+                return new DelegateCommand(DoAction);
+            }
+        } 
+
+        public ICommand ButtonStop
+        {
+            get
+            {
+                return new DelegateCommand(StopVideo);
+            }
+        }
 
         public void DoAction()
         {
-            ViewVideo viewVideo = _page as ViewVideo;
+            Video viewVideo = _page as Video;
             bool isPlaying = (viewVideo.actionButton.Content as string).Contains("Pause");
             viewVideo.actionButton.Content = (isPlaying ? "Play" : "Pause");
 
@@ -211,19 +215,12 @@ namespace EventsApp.ViewModel
                 viewVideo.videoElement.Play();
             else viewVideo.videoElement.Pause();
 
-            if (!viewVideo.stopButton.IsEnabled)
-                viewVideo.stopButton.IsEnabled = true;
-
-            if (!_playedPreviously)
-            {
-                _playedPreviously = true;
-                RaisePropertyChangedEvent(nameof(Selection));
-            }
+            viewVideo.stopButton.IsEnabled = true;
         }
 
         public void StopVideo()
         {
-            ViewVideo viewVideo = _page as ViewVideo;
+            Video viewVideo = _page as Video;
             viewVideo.videoElement.Stop();
             viewVideo.actionButton.Content = "Play";
             viewVideo.stopButton.IsEnabled = false;
